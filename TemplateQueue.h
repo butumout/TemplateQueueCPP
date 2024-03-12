@@ -8,49 +8,10 @@
 #ifndef QUEUE_TEMPLATEQUEUE_H_
 #define QUEUE_TEMPLATEQUEUE_H_
 
-#include "DEFINES.h"
-
 #include <cstdint>
 
 template<class T>
 class TemplateQueue {
-public:
-    uint16_t push(T data);
-    uint16_t pushAll(T *buf, uint16_t push_size);
-    uint16_t pop();
-    uint16_t pops(uint16_t pop_size);
-    uint16_t popAll();
-    uint16_t read();
-    uint16_t readQ(T *read_buf, uint16_t read_size);
-    uint16_t readAll(T *read_buf);
-    void clear();
-    void init();
-    uint16_t getMaxSize();
-    bool isFull();
-    bool isEmpty();
-    bool isAvailable();
-    bool isAvailable(uint16_t temp_size);
-
-private:
-    T *Q;
-    uint16_t front;
-    uint16_t end;
-    uint16_t maxSize;
-
-    uint16_t get_front();
-    void set_front(uint16_t temp_front);
-    uint16_t get_end();
-    void set_end(uint16_t temp_end);
-    void inc_front();
-    void inc_end();
-    uint16_t get_left_space();
-    uint16_t get_Q_size();
-    uint16_t inc_pos(uint16_t temp_pos);
-    uint16_t dec_pos(uint16_t temp_pos);
-    uint16_t get_delta_end(uint16_t temp_pos);
-    uint16_t check_inc_edge(uint16_t temp_pos);
-    uint16_t check_dec_edge(int temp_pos);
-
 public:
     TemplateQueue(uint16_t size) {
         maxSize = size;
@@ -266,6 +227,11 @@ public:
     }
 
 private:
+    T *Q;
+    uint16_t front;
+    uint16_t end;
+    uint16_t maxSize;
+
     uint16_t get_front() {
         return front;
     }
