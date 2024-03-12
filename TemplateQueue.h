@@ -9,8 +9,9 @@
 #define QUEUE_TEMPLATEQUEUE_H_
 
 #include <cstdint>
+#include <cstring>
 
-template<class T>
+template<typename T>
 class TemplateQueue {
 public:
     TemplateQueue(uint16_t size) {
@@ -27,40 +28,37 @@ public:
     uint16_t push(T data) {
         uint16_t return_val = 0;
 
-        if (isFull() == false) {
-            Q[get_end()] = data;
-            inc_end();
-            return_val = 1;
+        if (isFull() == true) {
+            inc_front();
         }
+
+        Q[get_end()] = data;
+        inc_end();
+        return_val = 1;
 
         return return_val;
     }
 
     uint16_t pushAll(T *buf, uint16_t push_size) {
         uint16_t return_val = 0;
-        uint16_t Q_left_size = 0;
         uint16_t push_left_size = 0;
         uint16_t end_pos_left_size = 0;
 
-        Q_left_size = get_left_space();
+        end_pos_left_size = get_delta_end(get_end());
 
-        if (Q_left_size > push_size) {
-            end_pos_left_size = get_delta_end(get_end());
+        if (end_pos_left_size < push_size) {
+            memcpy(&Q[get_end()], &buf[0], end_pos_left_size);
+            return_val += end_pos_left_size;
 
-            if (end_pos_left_size < push_size) {
-                memcpy(&Q[get_end()], &buf[0], end_pos_left_size);
-                return_val += end_pos_left_size;
+            push_left_size = push_size - end_pos_left_size;
+            memcpy(&Q[0], &buf[end_pos_left_size], push_left_size);
+            return_val += push_left_size;
 
-                push_left_size = push_size - end_pos_left_size;
-                memcpy(&Q[0], &buf[end_pos_left_size], push_left_size);
-                return_val += push_left_size;
-
-                set_end(push_left_size);
-            } else {
-                memcpy(&Q[get_end()], &buf[0], push_size);
-                return_val += push_size;
-                set_end(get_end() + push_size);
-            }
+            set_end(push_left_size);
+        } else {
+            memcpy(&Q[get_end()], &buf[0], push_size);
+            return_val += push_size;
+            set_end(get_end() + push_size);
         }
 
         return return_val;
