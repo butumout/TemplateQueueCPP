@@ -412,6 +412,8 @@ private:
             } else {
                 return_val = temp_front + pop_by_full_size;
             }
+        } else {
+            return_val = temp_front;
         }
 
         return return_val;
